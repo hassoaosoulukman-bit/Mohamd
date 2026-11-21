@@ -12,15 +12,16 @@ jobs:
         run: |
           unzip -q OsoGoldTV-Pro-GitHub.zip -d extracted
           SUB=$(find extracted -name "settings.gradle*" -exec dirname {} \; | head -n 1)
-          cp -rn "$SUB"/. .
-          chmod +x gradlew
+          cp -r "$SUB"/. .
       - uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
-      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
       - name: Build
-        run: ./gradlew assembleDebug --no-daemon
+        run: gradle assembleDebug --no-daemon --stacktrace
       - uses: actions/upload-artifact@v4
         with:
           name: OsoGoldTV-APK
